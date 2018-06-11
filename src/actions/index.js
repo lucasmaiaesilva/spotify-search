@@ -1,0 +1,1 @@
+export const setToken = ({ access_token }) => ({ type: 'SET_TOKEN', token: access_token })

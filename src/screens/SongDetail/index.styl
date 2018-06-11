@@ -1,0 +1,27 @@
+.detail-song
+  padding 2rem 0
+  .back
+    position relative
+    padding-left 18px
+    &:before
+      transform rotate(45deg)
+      border-left 2px solid #fff
+      border-bottom 2px solid #fff
+      position absolute
+      top 6px
+      left 0px
+      content ''
+      width 10px
+      height 10px
+    &:hover
+      text-decoration underline
+      cursor pointer
+  &-block
+    margin-top 4rem
+    @media screen and (min-width: 1024px)
+      display flex
+      .detail-image-block
+        width: 30%
+      .list-songs
+        flex-grow 1
+        padding-left 2.5rem
