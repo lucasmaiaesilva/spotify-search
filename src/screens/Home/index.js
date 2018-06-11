@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react'
+import { connect } from 'react-redux'
 import Paragraph from '../../components/Paragraph'
 import Input from '../../components/Input'
 import ResultBlock from '../../components/ResultBlock/'
@@ -26,21 +27,13 @@ class Home extends Component {
     })
   }
 
-  getToken() {
-    const { location } = this.props
-    const { state } = location
-    const { token } = state
-    return token.access_token
-  }
-
   handleSubmit = (e) => {
     e.preventDefault()
-    const accessToken = this.getToken()
     const url = `https://api.spotify.com/v1/search?q=${this.state.value}&type=album`
     this.setState({
       isLoading: true
     })
-    getData(url, accessToken)
+    getData(url, this.props.token)
       .then(data => this.setState(prevState => {
         let customSongList
         if (data.albums !== undefined) {
@@ -48,7 +41,6 @@ class Home extends Component {
         } else {
           customSongList = false
         }
-        console.log(customSongList)
         return {
           customSongList,
           query: prevState.value,
@@ -70,6 +62,26 @@ class Home extends Component {
     })
   }
 
+  result = () => {
+    if (this.state.customSongList.length === 0 && this.state.query.length > 0) {
+      return (
+        <ResultBlock
+          title={`Não foi encontrado nenhum resultado para sua Busca por "${this.state.query}"`}
+          handleClick={this.detailPageCall}
+        />
+      )
+    }
+    if (this.state.customSongList.length === 0 && this.state.query.length === 0) {
+      return false
+    }
+    return (
+      <ResultBlock
+        title={`Resultados encontrados para "${this.state.query}"`}
+        data={this.state.customSongList}
+        handleClick={this.detailPageCall}
+      />
+    )
+  }
   search() {
     const { value } = this.state
     return (
@@ -86,19 +98,7 @@ class Home extends Component {
           />
         </form>
 
-        {this.state.customSongList.length > 0 && this.state.query ? (
-            <ResultBlock
-              title={`Resultados encontrados para "${this.state.query}"`}
-              data={this.state.customSongList}
-              handleClick={this.detailPageCall}
-            />
-          ) : (
-            <ResultBlock
-              title={`Não foi encontrado nenhum resultado para sua Busca por "${this.state.query}"`}
-              handleClick={this.detailPageCall}
-            />
-          )
-        }
+        {this.result()}
       </Fragment>
     )
   }
@@ -124,4 +124,8 @@ class Home extends Component {
   }
 }
 
-export default Home
+const mapStateToProps = state => ({
+  token: state.token,
+})
+
+export default connect(mapStateToProps)(Home)

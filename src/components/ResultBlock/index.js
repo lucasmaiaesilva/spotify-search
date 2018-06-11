@@ -5,7 +5,7 @@ import AlbumThumb from '../AlbumThumb'
 
 import './index.styl'
 
-const ResultBlock = ({ title, data, handleClick }) => (
+const ResultBlock = ({ title, data, handleClick, displayTitle }) => (
   <section className='result-block'>
     <Paragraph className='medium white'>
       {title}

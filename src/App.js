@@ -46,5 +46,4 @@ const mapStateToProps = state => ({
   updateToken: state.updateToken
 })
 
-
 export default withRouter(connect(mapStateToProps)(App))
